@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package algebraic;
+
+service Algebraic {
+  // Exponent
+  rpc Exponent (ExponentMessage) returns (IntegerResponse);
+  // Factorial
+  rpc Factorial (FactorialMessage) returns (IntegerResponse);
+}
+
+// Input -----------------------------------------------------------------------------------------------------------------
+
+message ExponentMessage {
+  uint64 base = 1;
+  uint64 exponent = 2;
+}
+
+message RootMessage {
+  uint64 base = 1;
+  uint64 value = 2;
+}
+
+message FactorialMessage {
+  uint64 value = 1;
+}
+
+// Output -----------------------------------------------------------------------------------------------------------------
+
+message IntegerResponse {
+  uint64 value = 1;
+}
+
+message FloatResponse {
+  float value = 1;
+}
