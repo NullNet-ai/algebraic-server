@@ -4,7 +4,7 @@ package algebraic;
 
 service Algebraic {
   // Exponent
-  rpc Exponent (ExponentMessage) returns (IntegerResponse);
+  rpc Exponent (ExponentMessage) returns (FloatResponse);
   // Factorial
   rpc Factorial (FactorialMessage) returns (IntegerResponse);
 }
@@ -12,17 +12,12 @@ service Algebraic {
 // Input -----------------------------------------------------------------------------------------------------------------
 
 message ExponentMessage {
-  uint64 base = 1;
-  uint64 exponent = 2;
-}
-
-message RootMessage {
-  uint64 base = 1;
-  uint64 value = 2;
+  float base = 1;
+  uint32 exponent = 2;
 }
 
 message FactorialMessage {
-  uint64 value = 1;
+  uint32 value = 1;
 }
 
 // Output -----------------------------------------------------------------------------------------------------------------

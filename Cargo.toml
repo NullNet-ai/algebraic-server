@@ -7,9 +7,7 @@ edition = "2021"
 tonic = { version = "0.12.3", features = ["tls", "tls-roots"] }
 prost = "0.13.4"
 tokio = { version = "1.42.0", features = ["rt-multi-thread"] }
-add = { path = "../arithmetic-workspace/server_libraries/add" }
 multiply = { path = "../arithmetic-workspace/server_libraries/multiply" }
-divide = { path = "../arithmetic-workspace/server_libraries/divide" }
 
 [build-dependencies]
 tonic-build = "0.12.3"

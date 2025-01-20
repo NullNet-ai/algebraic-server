@@ -1,5 +1,7 @@
 use crate::proto::algebraic::algebraic_client::AlgebraicClient;
-use crate::proto::algebraic::{ExponentMessage, FactorialMessage};
+pub use crate::proto::algebraic::{
+    ExponentMessage, FactorialMessage, FloatResponse, IntegerResponse,
+};
 use tonic::transport::Channel;
 use tonic::Request;
 
@@ -11,7 +13,7 @@ pub struct AlgebraicClientImpl {
 }
 
 impl AlgebraicClientImpl {
-    pub async fn exponent(&self, base: u64, exponent: u64) -> Option<u64> {
+    pub async fn exponent(&self, message: ExponentMessage) -> Option<FloatResponse> {
         let channel = Channel::from_shared(format!("http://{}:{}", self.addr, self.port))
             .unwrap()
             .connect()
@@ -19,16 +21,14 @@ impl AlgebraicClientImpl {
             .unwrap();
         let mut client = AlgebraicClient::new(channel);
 
-        let exponent_message = ExponentMessage { base, exponent };
-
         client
-            .exponent(Request::new(exponent_message))
+            .exponent(Request::new(message))
             .await
-            .map(|x| x.into_inner().value)
+            .map(tonic::Response::into_inner)
             .ok()
     }
 
-    pub async fn factorial(&self, value: u64) -> Option<u64> {
+    pub async fn factorial(&self, message: FactorialMessage) -> Option<IntegerResponse> {
         let channel = Channel::from_shared(format!("http://{}:{}", self.addr, self.port))
             .unwrap()
             .connect()
@@ -36,12 +36,10 @@ impl AlgebraicClientImpl {
             .unwrap();
         let mut client = AlgebraicClient::new(channel);
 
-        let factorial_message = FactorialMessage { value };
-
         client
-            .factorial(Request::new(factorial_message))
+            .factorial(Request::new(message))
             .await
-            .map(|x| x.into_inner().value)
+            .map(tonic::Response::into_inner)
             .ok()
     }
 }
