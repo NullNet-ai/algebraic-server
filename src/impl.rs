@@ -47,3 +47,31 @@ impl Algebraic for AlgebraicImpl {
         Ok(Response::new(response))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_exponent() {
+        let algebraic_impl = AlgebraicImpl;
+        let message = ExponentMessage {
+            base: 2.0,
+            exponent: 3,
+        };
+        let request = Request::new(message);
+
+        let response = algebraic_impl.exponent(request).await.unwrap();
+        assert_eq!(response.into_inner().value, 8.0);
+    }
+
+    #[tokio::test]
+    async fn test_factorial() {
+        let algebraic_impl = AlgebraicImpl;
+        let message = FactorialMessage { value: 10 };
+        let request = Request::new(message);
+
+        let response = algebraic_impl.factorial(request).await.unwrap();
+        assert_eq!(response.into_inner().value, 3628800);
+    }
+}
