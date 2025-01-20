@@ -7,36 +7,33 @@ use tonic::Request;
 
 mod proto;
 
-pub struct AlgebraicClientImpl {
-    pub addr: String,
-    pub port: u16,
+#[derive(Clone)]
+pub struct AlgebraicGrpcInterface {
+    client: AlgebraicClient<Channel>,
 }
 
-impl AlgebraicClientImpl {
-    pub async fn exponent(&self, message: ExponentMessage) -> Option<FloatResponse> {
-        let channel = Channel::from_shared(format!("http://{}:{}", self.addr, self.port))
+impl AlgebraicGrpcInterface {
+    pub async fn new(addr: &'static str, port: u16) -> Self {
+        let channel = Channel::from_shared(format!("http://{addr}:{port}"))
             .unwrap()
             .connect()
             .await
             .unwrap();
-        let mut client = AlgebraicClient::new(channel);
+        Self {
+            client: AlgebraicClient::new(channel),
+        }
+    }
 
-        client
+    pub async fn exponent(&mut self, message: ExponentMessage) -> Option<FloatResponse> {
+        self.client
             .exponent(Request::new(message))
             .await
             .map(tonic::Response::into_inner)
             .ok()
     }
 
-    pub async fn factorial(&self, message: FactorialMessage) -> Option<IntegerResponse> {
-        let channel = Channel::from_shared(format!("http://{}:{}", self.addr, self.port))
-            .unwrap()
-            .connect()
-            .await
-            .unwrap();
-        let mut client = AlgebraicClient::new(channel);
-
-        client
+    pub async fn factorial(&mut self, message: FactorialMessage) -> Option<IntegerResponse> {
+        self.client
             .factorial(Request::new(message))
             .await
             .map(tonic::Response::into_inner)
