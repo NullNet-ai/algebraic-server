@@ -7,7 +7,7 @@ edition = "2021"
 tonic = { version = "0.12.3", features = ["tls", "tls-roots"] }
 prost = "0.13.4"
 tokio = { version = "1.42.0", features = ["rt-multi-thread"] }
-multiply = { path = "../arithmetic-workspace/server_libraries/multiply" }
+multiply = { git = "https://github.com/NullNet-ai/arithmetic-workspace", branch = "main" }
 
 [build-dependencies]
 tonic-build = "0.12.3"
